@@ -1,0 +1,71 @@
+;Question 1a
+
+(define make-account-lambda
+         (lambda (balance)
+           (define withdraw
+             (lambda (amount)
+               (if (>= balance amount)
+                   (begin (set! balance (- balance amount))
+                          balance)
+                   "Insufficient funds")))
+           (define deposit
+             (lambda (amount)
+               (set! balance (+ balance amount))
+               balance))
+           (lambda (m)  
+             (cond ((eq? m 'withdraw) withdraw)
+                   ((eq? m 'deposit) deposit)
+                   (else (error "Unknown request --> MAKE-ACCOUNT" m))))))
+
+
+;question 1b
+(define make-account-inline
+         (lambda (balance)
+           (lambda (m)  
+             (cond ((eq? m 'withdraw) (lambda (amount)
+               (if (>= balance amount)
+                   (begin (set! balance (- balance amount))
+                          balance)
+                   "Insufficient funds"))))
+                   ((eq? m 'deposit) (lambda (amount)
+               (set! balance (+ balance amount))
+               balance)))
+                   (else (error "Unknown request --> MAKE-ACCOUNT" m))))
+
+
+;question 1c
+(define make-account-inline-factored
+         (lambda (balance)
+           (lambda (m)
+             (lambda (amount)
+             (cond ((eq? m 'withdraw) 
+               (if (>= balance amount)
+                   (begin (set! balance (- balance amount))
+                          balance)
+                   "Insufficient funds"))
+                   ((eq? m 'deposit) 
+               (set! balance (+ balance amount))
+               balance)
+                   (else (error "Unknown request --> MAKE-ACCOUNT" m)))))))
+
+
+
+;question 3, Exercise 3.2
+
+(define (make-monitored f)
+  ;starts the number of calls at 0
+  (let ((calls 0))
+    (lambda (mf)
+      ;first cond: special symbol to return call value
+      (cond ((equal? mf 'how-many-calls?) calls)
+            ;second cond resets call value to zero
+            ((equal? mf 'reset-count) (set! calls 0))
+            ;else increments calls by 1
+            (else (begin (set! calls (+ calls 1)) 
+                          (f mf)))
+			))))	
+
+
+
+
+

@@ -1,0 +1,52 @@
+Problem 5.9
+
+I started with this one first since it would be alone in its own file.
+This was not to difficult, I added a simple if statement that checks if the
+operation is a label or not, and if it is, gives an error. If not it proceeds
+normally. 
+
+problem 5.8
+
+It took me a while to think about how to do this and a friend suggested 
+creating a separate list to store label values that can be cross referenced
+to check for duplicates, which is what I did. The list is set back to an empty
+list at the end of extract-labels so register machines do not conflict with
+eachother's labels.
+
+
+5.19
+
+I implemented proceed easily, it simply calls the execute procedure 
+again to continue running without resetting anything.
+
+I wanted to implement a register that holds labels and deal with the breakpoint
+by taking the offset from the labels and adding that to the position of the 
+label to find where the stop. 
+
+Cancelling all breakpoints was as easy as setting the breakpoints register to
+the empty list. Cancelling specific ones was a bit harder and required me to 
+remake the breakpoint list every single time execute is called as the
+breakpoint register had to be changed as well as the list that dealt with the
+offset. While this isn't particularly efficient, it works.
+
+After this, based on gradescope I am able to get correct turns for a few parts 
+like test-b 4, and some of the registers but none of my set-breakpoint, cancel
+etc seem to be working. I see cancel returned something, but it was the wrong 
+value.
+
+After testing, there seems to be an issue with how my program gets content from
+registers. 
+I was able to fix this after realizing that my new-bps procedure was not 
+properly getting data from the breakpoints register I made.
+
+However, after this I am getting errors like: 
+"application: not a procedure;" on gradescope which appear to be coming from 
+my proceed calls. The error after further inspection was due to a small mistake
+of not putting a space between a + and a 1. Once I fixed that as well as
+some extra parenthesis, proceed worked  for me.
+
+I then had more issues with cancel, which after combing was more of the same 
+incorrect parenthesis causing my variables to be seen as procedures. 
+
+I made a few more changes to modify my output to match what was posted
+on piazza but did not get it exactly the same.
