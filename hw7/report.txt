@@ -1,0 +1,101 @@
+***note***
+Part 2, continuation discussion is dispersed into my part 1 problems as I was
+ working on part 1, thought I needed to do part 2 for it to work so I switched
+back and forth between them, fixing part 2 as I went along between delayed
+and dynamic arguments.
+
+
+problem 1, delayed.
+
+I had a lot of trouble with this, I thought I implemented it properly and was
+able to compile but i could not get gradescope to pass. Once I properly
+modified xeval to check properly for, I was able to get test delayed to 
+return 1 however I was still getting a lot of errors in gradescope. I 
+moved on, unsure if they were from future problems or not.
+
+I created a new list-of-values procedure to check if the argument is
+delayed and if it was to create a thunk with it.
+
+I also had to make a procedure to untag the tagged arguments, or to unlabel
+a delayed argument back to a normal argument so it can be passed.
+
+I was getting a lot of errors regarding how my exits were handleded and it was
+ causing me a lot of issues while testing.
+
+Due to this, I stopped part 1 to work on part 2, continuation and exits. I 
+followed save continuation.scm as best I could and implemented a
+call-with-current-continuation in my main driver loop to have an exit point
+to which I could jump and skip the s450 prompt.
+
+I also implemented a cond in xeval to check if the expression is an
+eof-object, and if so, exit s450.
+
+I was able to get exit working properly, but then my delayed arguments stopped
+working complete on gradescope.
+
+I was eventually able to modify my xeval to work with exit and was able to pass 
+delayed for the most part (I believed). I later realized that something was 
+wrong with my code somewhere causing the second delayed test to return
+"stream-car s" instead of 3.
+
+After looking over my delay, I realized that it was not my delay but my 
+stream-cdr and stream-cons procedures so I redid them and was able to get
+it working. 
+
+Problem 2, dynamic
+
+I started by defining the-dynamic-environment and then some procedures like
+dynamic? to check if something is dynamic. I then modified the new
+list-of-values procedure I made for delayed to also parse dynamic arguments. 
+
+I implemented what I thought would be the correct dynamic environment, however
+upon running gradescope tests I was given the same results, meaning that my 
+delayed was not working properly. 
+
+I thought the issue might be that I had not implemented the method for an error
+to return to the s450 prompt, so I implemented that along with new errors 
+however I still could not pass gradescope tests.
+
+I realized that there was an error that I kept getting and would not reset 
+s450, and that was something like (1) where you have a number or non procedure
+in parenthesis. I fixed this by modifying how my list-of-values-delayed
+is called via xeval. I added an if that checks if the input procedure is a list
+or not. If it is, it called upon list-of-values-delayed using the
+procedure-parameters of the procedure. if not, list-of-values-delayed is 
+passed with just the procedure itself.
+
+Unfortunately, this did not fix my issue with the gradescope tests exiting 
+prematurely.
+
+At this point, a new gradescope test was uploaded and I was able to see that
+my code was for the most part working so I moved onto problem 3.
+
+Problem 3, reference
+
+I based my base reference procedures off of delayed and thunk as the handout
+had said the implementation follows. I then modified any conds I had that 
+checked for delayed and also added a cond for them to check for reference
+as well.
+
+When testing, it seemed to work well although my return for one test was
+allowing the dynamic argument to pass as a reference and then erroring
+after. I added an if clause in my list-of-values-delayed that checks if the 
+operand is a symbol or not for references, and if not, it will error out.
+
+I was getting an error on the last reference test in gradescope where it would
+return 5 5 2 instead of 5 5 5. 
+
+After combing over the code and changing things in regards to refences, I 
+realized that my error was coming from my implementation of reference
+in set-variable-value! where I was calling the procedure with the wrong 
+environment. 
+
+
+
+Question: What about define-variable!? Do you need to make any changes to 
+that procedure? 
+
+I did not have to make any changes to define-variable!. Delay and reference
+refer to the value of another variable so there is no need to modify the
+actual variable at any point. 
+

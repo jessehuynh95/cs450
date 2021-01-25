@@ -1,0 +1,61 @@
+cs450 hw6
+Fall 2020
+
+1.
+After playing around with the s450 evaluator for a bit, I have found that
+it does not seem to have any procedures such as +, - , /, *, or = implemented.
+It did have define and  I was able to define and return a variable. I was
+unable to get it to do much more than this, however.
+
+2, 3, 4, 5. 
+These were all implemented in groups as I kept getting errors from things and
+thinking I required everything at once to work so I just implemented most of
+it in one big swing.
+
+
+At first I had thought install-special-form was supposed to be called 
+after running the program and entering (s450). I kept getting variable unbound
+which kept confusing me. I finally tried to add my install-special-forms 
+inside the program, by defining them inside and it worked.
+
+None of the gradescope tests passed at first. It was because I did not name my
+function defined but something else. Once I changed it and made defined? a 
+special form they passed. 
+
+Some of my errors where then showing up incorrectly formatted or in the wrong 
+places so I had to fix that through trial and error renaming until I figured
+out which errors that gradescope wanted went where.
+
+The error I had the most trouble with was when trying to redefine special 
+forms, but I realized that I had to edit set-variable-value and 
+define-variable after a lot of digging. 
+
+6. Upon realizing that defined? was actually something we needed to implement
+for problem 6, I edited my current defined? procedure as I had created one
+to use in my install-special-form procedure. (I suppose I should have read
+the entire document first before starting instead of just skimming...)
+
+locally-defined was simple enough, I checked the expression and the 
+environment to see if the expression was a member of the environment. If yes,
+returns true, else false.
+
+For make-unbound, I the explanation in the handout seemed simple but it
+was not as easy to implement. I make a cond that basically checks if the 
+symbol to be unbounded is within the current environment, and if so it sets
+it to null. It then loops until all environments have been checked.
+
+locally-make-unbound! does the same thing except it never loops to all
+environments, it will only check the current/first environment.
+
+If you execute (f 3 4), it should return two #t as a and b are locally
+defined, and then once they are unbound it will return two #f's followed
+by #<void> which seems to get returned after any displays in my s450.
+
+So the return would be #t #t #f #f #<void>
+
+**note from after completing the assignment, I noticed that on gradescope
+you had published what a correct output for the gradescope tests should be. 
+I don't think it matters but I simply copied the provided errors from the
+gradescope tests and had mine output them. Also, I am still getting one 
+"Error: `exit-hack' is undefined." but it seems that all of my code
+generates properly in the tests. 
